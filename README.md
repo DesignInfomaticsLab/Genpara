@@ -1,4 +1,4 @@
-# 🚀 GenPara
+![test_gaussian_rotation](https://github.com/user-attachments/assets/b6bf4637-94f1-43eb-ad68-8535b680dddb)# 🚀 GenPara
 **Enhancing 3D Design Editing with Text-Conditional Shape Parameters and Bayesian ROI Inference**  
 *CHI 2025 *  
 
@@ -102,9 +102,9 @@ openai api fine_tuning.jobs.create -t dataset/fine_tuning_data/train.jsonl -m gp
 ### 4. Deploy Fine-tuned Model
 Model returns full extrinsic latent vectors suitable for reconstruction.
 
-![Uploading genpara_thumbnail_big.gif…]()
 
----
+---![test_gaussian_rotation](https://github.com/user-attachments/assets/69f79ec9-8388-4a5d-9fe6-1de299d22251)
+
 
 # 🗺️ Frontend (Exploration Map & Versioning Tree) 
 
