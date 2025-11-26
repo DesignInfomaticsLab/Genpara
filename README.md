@@ -61,14 +61,14 @@ Each model should contain:
 - 16 Gaussian blobs
 - Each blob: 16 parameters (Mu, eigenvectors, Pi, eigenvalues)
 
-Place JSON files in:
+Example JSON files in:
 ```
 dataset/GenPara_finetuningDataset_chairs.jsonl/
 ```
 
 ### 2. Create Fine-tuning Dataset (JSONL)
 Each record must contain:
-- System instruction
+- System instruction 
 - User request describing parts + adjectives
 - Assistant output providing adjusted extrinsic latents
 
