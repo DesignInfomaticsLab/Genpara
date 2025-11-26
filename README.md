@@ -21,14 +21,11 @@
 
 - [x] Upload of extrinsic latent dataset format and examples. (Nov 2025)
 - [x] Upload of LLM fine-tuning dataset structure and instructions. (Nov 2025)
-- [x] Release of full README with setup & usage guide. (Feb 2025)
-
+- [x] Release of full README with setup & usage guide. (Nov 2025)
+- [x] Generation Code with fine-tuned model (Nov 2025) 
 - [ ] Release of GenPara backend (LLM inference + ROI model). (Coming soon)
 - [ ] Release of GenPara frontend (Exploration Map & Versioning Tree). (Coming soon)
-- [ ] Public demo of text-conditional part-level editing. 
-- [ ] Public demo of ROI-guided exploration workflow.
-- [ ] Full open-source implementation including training scripts. 
-- [ ] Support for non-chair classes (tables, airplanes, lamps).
+- [ ] Public demo 
 
 
 # ✨ Key Features
