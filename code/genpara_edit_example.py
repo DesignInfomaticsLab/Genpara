@@ -30,10 +30,10 @@ from openai import OpenAI
 # 0. Repo-relative imports (SALAD / SPAGHETTI)
 # ---------------------------------------------------------------------
 
-# 필요하면 여기서 sys.path 정리 (예: 다른 프로젝트 경로 제거)
+# Optionally clean sys.path here (e.g., remove conflicting project paths)
 # sys.path = [p for p in sys.path if "salad" not in p and "bomani" not in p]
 
-# 이 스크립트 기준으로 SALAD, SPAGHETTI가 import 가능하다고 가정
+# Assume that SALAD and SPAGHETTI are importable from this script location
 from salad.models.phase1 import Phase1Model
 from salad.models.phase2 import Phase2Model
 from salad.utils import visutil, imageutil
@@ -93,10 +93,10 @@ def split_gmm(v, f, extrinsics):
 
 
 # ---------------------------------------------------------------------
-# 2. OpenAI fine-tuned model 호출 부분
+# 2. OpenAI fine-tuned model call
 # ---------------------------------------------------------------------
 
-# 여러분이 실제 fine-tuning 후 받는 모델 이름으로 교체
+# Replace this with the actual model name you get after fine-tuning
 FT_MODEL_NAME = "ft:gpt-4o-mini:YOUR_ORG:genpara-latent-edit"  # TODO: change
 
 
@@ -107,11 +107,11 @@ def edit_chair_latent(
     adjective: str,
 ):
     """
-    Call fine-tuned GenPara model to edit extrinsic latents.
+    Call the fine-tuned GenPara model to edit extrinsic latents.
 
     extrinsics: shape (1, 16, 16) or (16, 16)
     part_indices: e.g., [4, 11]
-    adjective: e.g., "short", "wide and enclosed"
+    adjective: e.g., "short back", "wide and enclosed back"
     """
     import json
     import time
@@ -120,10 +120,8 @@ def edit_chair_latent(
         extrinsics = extrinsics[0]
 
     data = extrinsics.tolist()
-    # 숫자를 적당히 반올림해서 프롬프트 크기 줄이기 (선택 사항)
-    rounded_data = [
-        [round(float(v), 4) for v in row] for row in data
-    ]
+    # Optionally round numbers to reduce prompt size
+    rounded_data = [[round(float(v), 4) for v in row] for row in data]
     json_latents = json.dumps(rounded_data)
 
     indices_str = "[" + ", ".join(str(i) for i in part_indices) + "]"
@@ -199,10 +197,10 @@ def main():
     mesher = load_mesher(device=DEVICE)
 
     # 2) Sample one chair extrinsic latent
-    extrinsics = phase1_model.sampling_gaussians(1)  # shape ~ (1, 16, 16)
+    extrinsics = phase1_model.sampling_gaussians(1)  # shape ≈ (1, 16, 16)
     extrinsics = torch.tensor(extrinsics, device=DEVICE, dtype=torch.float32)
 
-    # 3) Visualize original chair
+    # 3) Reconstruct and visualize the original chair
     intrinsics = phase2_model.sample(extrinsics)
     zcs = generate_zc_from_sj_gaus(spaghetti, intrinsics, extrinsics)
 
@@ -210,13 +208,13 @@ def main():
     try:
         v, f = visutil.get_mesh_from_spaghetti(spaghetti, mesher, zcs[0], res=256)
     except Exception as e:
-        print(f"[WARN] mesh reconstruction failed for original chair: {e}")
+        print(f"[WARN] Mesh reconstruction failed for original chair: {e}")
 
-    # 4) Edit with fine-tuned LLM
-    client = OpenAI()  # uses OPENAI_API_KEY
+    # 4) Edit with the fine-tuned LLM
+    client = OpenAI()  # Uses OPENAI_API_KEY from environment
 
-    highlight_indices = [4, 11]  # 예: 등받이 일부
-    adjective = "short back"     # 예시
+    highlight_indices = [4, 11]  # Example: subset of the backrest
+    adjective = "short back"     # Example adjective
 
     edited_extrinsics = edit_chair_latent(
         client=client,
@@ -227,7 +225,7 @@ def main():
 
     edited_extrinsics = edited_extrinsics.unsqueeze(0)  # (1, 16, 16)
 
-    # 5) Reconstruct edited chair
+    # 5) Reconstruct the edited chair
     edited_intrinsics = phase2_model.sample(edited_extrinsics)
     edited_zcs = generate_zc_from_sj_gaus(
         spaghetti, edited_intrinsics, edited_extrinsics
@@ -238,20 +236,28 @@ def main():
             spaghetti, mesher, edited_zcs[0], res=256
         )
     except Exception as e:
-        print(f"[WARN] mesh reconstruction failed for edited chair: {e}")
+        print(f"[WARN] Mesh reconstruction failed for edited chair: {e}")
         v_edit, f_edit = None, None
 
-    # 6) Render Gaussian + mesh (before/after)
+    # 6) Render Gaussian + mesh (before / after)
     images = []
 
-    # original
-    gaus_img_orig = visutil.render_gaussians(extrinsics[0], highlight_indices=[highlight_indices])
+    # Original
+    gaus_img_orig = visutil.render_gaussians(
+        extrinsics[0],
+        highlight_indices=[highlight_indices],
+    )
     mesh_img_orig = visutil.render_mesh(v, f) if v is not None else gaus_img_orig
     images.append([gaus_img_orig, mesh_img_orig])
 
-    # edited
-    gaus_img_edit = visutil.render_gaussians(edited_extrinsics[0], highlight_indices=[highlight_indices])
-    mesh_img_edit = visutil.render_mesh(v_edit, f_edit) if v_edit is not None else gaus_img_edit
+    # Edited
+    gaus_img_edit = visutil.render_gaussians(
+        edited_extrinsics[0],
+        highlight_indices=[highlight_indices],
+    )
+    mesh_img_edit = (
+        visutil.render_mesh(v_edit, f_edit) if v_edit is not None else gaus_img_edit
+    )
     images.append([gaus_img_edit, mesh_img_edit])
 
     final_img = imageutil.merge_images(images)
