@@ -75,7 +75,7 @@ Each record must contain:
 ### 3. Fine-tune Model
 Use OpenAI fine-tuning API:
 ```
-openai api fine_tuning.jobs.create -t dataset/fine_tuning_data/train.jsonl -m gpt-3.5-turbo-1106
+openai api fine_tuning.jobs.create -t dataset/GenPara_finetuningDataset_chairs.jsonl -m gpt-3.5-turbo-1106
 ```
 
 ### 4. Deploy Fine-tuned Model
