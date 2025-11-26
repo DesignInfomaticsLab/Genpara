@@ -1,0 +1,21 @@
+# Core numerical / ML stack
+torch>=2.1.0
+torchvision>=0.16.0
+numpy>=1.24.0
+scipy>=1.11.0
+
+# Config & experiment management
+omegaconf>=2.3.0
+hydra-core>=1.3.2
+pytorch-lightning>=2.1.0
+
+# Geometry / mesh & visualization utilities
+trimesh>=4.0.0
+matplotlib>=3.8.0
+Pillow>=10.0.0
+
+# Progress bar / small utils
+tqdm>=4.66.0
+
+# OpenAI API client (for fine-tuned GenPara model)
+openai>=1.6.0
