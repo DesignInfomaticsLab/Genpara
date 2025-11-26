@@ -102,6 +102,8 @@ openai api fine_tuning.jobs.create -t dataset/fine_tuning_data/train.jsonl -m gp
 ### 4. Deploy Fine-tuned Model
 Model returns full extrinsic latent vectors suitable for reconstruction.
 
+![Uploading genpara_thumbnail_big.gif…]()
+
 ---
 
 # 🗺️ Frontend (Exploration Map & Versioning Tree) 
